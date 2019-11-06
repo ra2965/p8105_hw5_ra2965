@@ -34,7 +34,16 @@ hw5 = list.files(path = "./data") %>%
   mutate(
     data_files = map(value, ~read_csv(str_c("./data/", .x)))
   ) %>% 
-  unnest()
+  unnest() 
+
+hw5 = pivot_longer( hw5,
+    week_1:week_8,
+    names_to = "week",
+    names_prefix = "week_",
+    values_to = "data"
+  )
+
+
   
 ```
 
