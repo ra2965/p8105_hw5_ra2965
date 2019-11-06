@@ -14,8 +14,9 @@ iris_with_missing = iris %>%
   mutate(Species = as.character(Species)) %>% 
   janitor::clean_names()
 ```
-
+#Problem1
 ```{r}
+
 fill_missing = function(x){
   if (is.numeric(x)){
     x = replace_na(x, mean(x, na.rm = TRUE))
@@ -24,11 +25,16 @@ fill_missing = function(x){
   }
 }
 
-
-output = map_df(iris_with_missing,fill_missing)
+output_iris = map_df(iris_with_missing,fill_missing)
 ```
-
-```{r}
-
+#Problem2
+```{r message = FALSE}
+hw5 = list.files(path = "./data") %>% 
+  tibble::enframe(name = NULL) %>% 
+  mutate(
+    data_files = map(value, ~read_csv(str_c("./data/", .x)))
+  ) %>% 
+  unnest()
+  
 ```
 
