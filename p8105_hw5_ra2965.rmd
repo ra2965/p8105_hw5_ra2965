@@ -28,22 +28,36 @@ fill_missing = function(x){
 output_iris = map_df(iris_with_missing,fill_missing)
 ```
 #Problem2
-```{r message = FALSE}
-hw5 = list.files(path = "./data") %>% 
-  tibble::enframe(name = NULL) %>% 
-  mutate(
-    data_files = map(value, ~read_csv(str_c("./data/", .x)))
-  ) %>% 
-  unnest() 
+```{r message = FALSE, warning=FALSE}
+hw5 = list.files(path = "./data") 
 
-hw5 = pivot_longer( hw5,
+data_files =  data_frame(files = hw5) %>%  
+  mutate(
+    data = map(files, ~read_csv(str_c("./data/", .x)))
+  ) %>% 
+  unnest(cols = data) %>% 
+  pivot_longer( 
     week_1:week_8,
     names_to = "week",
     names_prefix = "week_",
     values_to = "data"
-  )
+  ) %>% 
+  mutate(
+    control_arm = str_extract(files, "[:lower:]{3}"),
+    subject_id = str_extract(files, "\\d{2}")
+  ) %>% 
+  select(control_arm,subject_id,everything()) %>% 
+  select(-files)
 
+```
 
+```{r}
+
+  
+  
+  
+  
+  
   
 ```
 
