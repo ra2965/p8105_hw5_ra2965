@@ -68,9 +68,9 @@ data_files %>%
   )
   
 ```
-
+#Problem3
 ```{r}
-sim_regression = function(n, beta0 = 2, beta1 = 0) {
+sim_regression = function(n = 30, beta0 = 2, beta1) {
   
   sim_data = tibble(
     x = rnorm(n, mean = 1, sd = 1),
@@ -84,7 +84,7 @@ sim_regression = function(n, beta0 = 2, beta1 = 0) {
 output = vector("list", 10000)
 
 for (i in 1:10000) {
-  output[[i]] = sim_regression(30)
+  output[[i]] = sim_regression(30,2,0)
 }
 
 sim_results = rerun(10000, sim_regression(30, 2, 0)) 
@@ -94,5 +94,19 @@ estimates = map_df(.x = sim_results, ~broom::tidy(.x)) %>%
   janitor::clean_names() %>% 
   select(estimate,p_value)
 
+```
+
+```{r}
+beta1 = list("beta_1"  = 1, 
+              "beta_2"  = 2, 
+              "beta_3"  = 3, 
+              "beta_4"  = 4,
+              "beta_5"  = 5,
+              "beta_6"  = 6)
+output_multi = vector("list", length = 6)
+
+for (i in 1:6) {
+  output_multi[[i]] = rerun(10000, sim_regression(30, 2, beta1[[i]])) 
+}
 ```
 
