@@ -18,9 +18,9 @@ iris_with_missing = iris %>%
 ```{r}
 
 fill_missing = function(x){
-  if (is.numeric(x)){
+  if (is.numeric(x)) {
     x = replace_na(x, mean(x, na.rm = TRUE))
-  }else if(is.character(x)) {
+  } else if (is.character(x)) {
     x = replace_na(x, "virginica")
   }
 }
@@ -47,17 +47,51 @@ data_files =  data_frame(files = hw5) %>%
     subject_id = str_extract(files, "\\d{2}")
   ) %>% 
   select(control_arm,subject_id,everything()) %>% 
-  select(-files)
-
+  select(-files) %>% 
+  mutate(
+   control_arm = recode(control_arm, con = "control", exp = "experimental")
+  )
 ```
 
 ```{r}
 
+data_files %>% 
+  mutate(arm_id = str_c(control_arm,'_',subject_id)) %>% 
+  ggplot(aes(x = week, y = data, color = control_arm, group = arm_id)) +
+  geom_line() +
+  labs(
+    title = "Observations on each subject over weeks",
+    x = "Week",
+    y = "Observed data"
+  ) + theme(
+    legend.position = "bottom"
+  )
   
+```
+
+```{r}
+sim_regression = function(n, beta0 = 2, beta1 = 0) {
   
+  sim_data = tibble(
+    x = rnorm(n, mean = 1, sd = 1),
+    y = beta0 + beta1 * x + rnorm(n, 0, 50)
+  )
   
+  ls_fit = lm(y ~ x, data = sim_data)
   
-  
-  
+  tibble(
+    beta0_hat = coef(ls_fit)[1],
+    beta1_hat = coef(ls_fit)[2]
+  )
+}
+
+output = vector("list", 100)
+
+for (i in 1:100) {
+  output[[i]] = sim_regression(30)
+}
+
+sim_results = rerun(100, sim_regression(30, 2, 3)) %>% bind_rows(output)
+
 ```
 
