@@ -136,7 +136,8 @@ ggplot(reject_prop, aes( x = beta1_n, y = rej_prop)) +
 
 ```
 
-
+Describe the association between effect size and power: 
+Power is the probability of rejecting null given the null is not true. From this plot, it is clearly that the power will increase if the effect size increases.
 
 
 
