@@ -1,7 +1,7 @@
 ---
 title: "p8105_hw5_ra2965"
 author: Ran An
-data: 11/06/2019
+date: 11/06/2019
 output: github_document
 ---
 ```{r message=FALSE}
@@ -76,6 +76,8 @@ Comment: The observed data in control arm is lower than the experimental group. 
 
 
 #Problem3
+
+Set β1=0. Generate 10000 datasets from the model:
 ```{r}
 sim_regression = function(n = 30, beta0 = 2, beta1) {
   
@@ -98,6 +100,7 @@ output = rerun(10000, sim_regression(beta1 = 0)) %>% bind_rows()
 
 ```
 
+Repeat the above for β1={1,2,3,4,5,6}:
 ```{r}
 sim_results = 
   tibble(beta1_n = c(1, 2, 3, 4,5,6)) %>% 
@@ -108,7 +111,7 @@ sim_results =
   unnest(estimate_dfs)
 ```
 
-
+Make a plot showing the proportion of times the null was rejected:
 ```{r}
 
 reject_prop = sim_results %>% 
@@ -139,7 +142,7 @@ ggplot(reject_prop, aes( x = beta1_n, y = rej_prop)) +
 Describe the association between effect size and power: 
 Power is the probability of rejecting null given the null is not true. From this plot, it is clearly that the power will increase if the effect size increases.
 
-
+Make a plot showing the average estimate of beta1: 
 ```{r}
 avg_beta1 = sim_results %>% 
   group_by(beta1_n) %>% 
@@ -158,6 +161,7 @@ ggplot(avg_beta1, aes( x = beta1_n, y = estimate_avg)) +
     breaks = c(1, 2, 3,4,5,6))
 ```
 
+Make a second plot the average estimate of β̂ 1 only in samples for which the null was rejected:
 ```{r}
 rej_avg_beta1 = sim_results %>% 
   mutate(
@@ -177,4 +181,6 @@ ggplot(rej_avg_beta1, aes( x = beta1_n, y = estimate_avg_rej)) +
   scale_x_continuous(
     breaks = c(1, 2, 3,4,5,6))
 ```
-The sample average of β̂ 1 across tests for which the null is rejected is NOT approximately equal to the true value of β1.
+The sample average of beta1 across tests for which the null is rejected is NOT approximately equal to the true value of β1.
+
+When we are rejecting null, it means that the probability of seeing the observed or more extrem results are very low, which means that the observed values turn to be more extrem, in another word, turn to be larger.
