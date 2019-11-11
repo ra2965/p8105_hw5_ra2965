@@ -181,6 +181,8 @@ ggplot(rej_avg_beta1, aes( x = beta1_n, y = estimate_avg_rej)) +
   scale_x_continuous(
     breaks = c(1, 2, 3,4,5,6))
 ```
-The sample average of beta1 across tests for which the null is rejected is NOT approximately equal to the true value of β1.
+The sample average of beta1 across tests for which the null is rejected is NOT approximately equal to the true value of β1. It is higher.
 
-When we are rejecting null, it means that the probability of seeing the observed or more extrem results are very low, which means that the observed values turn to be more extrem, in another word, turn to be larger.
+Since n=30 and variance = 50, standard error is reletively large. To reject the null, the test statistics(t = estimated beta1/SE) needs to be large, which means that the estimated beta1 needs to be large.
+
+
